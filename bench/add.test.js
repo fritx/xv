@@ -1,4 +1,4 @@
-import assert from 'node:assert/strict'
+import assert from 'assert/strict'
 
 const add = (a, b) => a + b
 

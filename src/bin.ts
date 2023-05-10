@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-import { fork } from 'node:child_process'
-import { promises as fs } from 'node:fs'
-import { basename, join } from 'node:path'
-import { fileURLToPath, pathToFileURL } from 'node:url'
+import { fork } from 'child_process'
+import { promises as fs } from 'fs'
+import { basename, join } from 'path'
 
 const regexp = /^test\.(js|ts)$|\.test\.(js|ts)$/
 
@@ -19,7 +18,8 @@ function parse(argv: string[]): [string[], string[]] {
 }
 
 function forkProcess(execArgv: string[], args: string[]) {
-  const child = fork(fileURLToPath(import.meta.url), args, {
+  // const child = fork(fileURLToPath(import.meta.url), args, {
+  const child = fork(__filename, args, {
     execArgv,
     stdio: 'inherit',
   })
@@ -41,7 +41,8 @@ async function runTestFile(file: string): Promise<void> {
   const functions = []
   for (const v of Object.values(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    await import(pathToFileURL(file).toString()),
+    // await import(pathToFileURL(file).toString()),
+    require( join(process.cwd(), file)),
   )) {
     if (typeof v === 'function') functions.push(v)
   }
